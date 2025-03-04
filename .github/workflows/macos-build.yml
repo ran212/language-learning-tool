@@ -1,12 +1,10 @@
 name: Build macOS Binary
-
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: macos-latest
@@ -15,9 +13,14 @@ jobs:
     
     - name: Build
       run: |
+        # Ensure the Swift file is in the correct location
         swiftc -O LanguageLearningTool.swift -o language-learning-tool
         chmod +x language-learning-tool
-        zip -r language-learning-tool-macos.zip language-learning-tool
+        
+    - name: Package Binary
+      run: |
+        # Create a clean zip with just the executable
+        zip language-learning-tool-macos.zip language-learning-tool
         
     - name: Upload binary
       uses: actions/upload-artifact@v3
