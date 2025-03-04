@@ -1,0 +1,26 @@
+name: Build macOS Binary
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build
+      run: |
+        swiftc -O LanguageLearningTool.swift -o language-learning-tool
+        chmod +x language-learning-tool
+        zip -r language-learning-tool-macos.zip language-learning-tool
+        
+    - name: Upload binary
+      uses: actions/upload-artifact@v3
+      with:
+        name: language-learning-tool-macos
+        path: language-learning-tool-macos.zip
